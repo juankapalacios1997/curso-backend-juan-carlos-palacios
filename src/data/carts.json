@@ -1,0 +1,52 @@
+{
+  "carts": [
+    {
+      "id": "011",
+      "products": [
+        {
+          "title": "Don Julio 70",
+          "description": "Tequila Don Julio 70 750ml",
+          "code": "1014",
+          "price": 69.99,
+          "status": true,
+          "stock": 731,
+          "category": "tequila",
+          "thumbnails": [
+            "https://corpovino.com/cdn/shop/files/Don_Julio_70_Caja.png?v=1752779614",
+            "https://i5.walmartimages.com.mx/mg/gm/1p/images/product-images/img_large/00500028105626l.jpg?odnHeight=612&odnWidth=612&odnBg=FFFFFF"
+          ],
+          "id": "001",
+          "quantity": 3
+        }
+      ]
+    },
+    {
+      "id": "012",
+      "products": [
+        {
+          "title": "Don Julio 70",
+          "description": "Tequila Don Julio 70 750ml",
+          "code": "1014",
+          "price": 69.99,
+          "status": true,
+          "stock": 731,
+          "category": "tequila",
+          "thumbnails": [
+            "https://corpovino.com/cdn/shop/files/Don_Julio_70_Caja.png?v=1752779614",
+            "https://i5.walmartimages.com.mx/mg/gm/1p/images/product-images/img_large/00500028105626l.jpg?odnHeight=612&odnWidth=612&odnBg=FFFFFF"
+          ],
+          "id": "001",
+          "quantity": 4
+        }
+      ]
+    },
+    {
+      "id": "013",
+      "products": []
+    },
+    {
+      "id": "014",
+      "products": []
+    }
+  ]
+}
