@@ -8,8 +8,23 @@ const manager = new CartsManager();
 const productManager = new ProductManager();
 
 router.get('/', async(req, res) => {
-    const carts = await manager.fetchAllCarts();
-    res.json(carts); 
+    const { name } = req.query;
+    try {
+        if (name) {
+            const cart = await manager.getCartByName(name);
+            if (!cart) {
+                await manager.createCart(name);
+            }
+            return res.json(cart);
+        }
+
+        const carts = await manager.getAllCarts();
+        res.json(carts);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 router.post('/', async(req, res) => {

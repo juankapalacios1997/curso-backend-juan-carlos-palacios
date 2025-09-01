@@ -2,29 +2,22 @@
   {
     "title": "Don Julio 70",
     "description": "Tequila Don Julio 70 750ml",
-    "code": "1014",
     "price": 39.99,
-    "status": true,
     "stock": 731,
-    "category": "tequila",
-    "thumbnails": [
-      "https://corpovino.com/cdn/shop/files/Don_Julio_70_Caja.png?v=1752779614",
-      "https://i5.walmartimages.com.mx/mg/gm/1p/images/product-images/img_large/00500028105626l.jpg?odnHeight=612&odnWidth=612&odnBg=FFFFFF"
-    ],
     "id": "001"
   },
   {
     "title": "1800 Cristalino",
     "description": "Tequila 1800 Cristalino 750ml",
-    "code": "1014",
     "price": 49.99,
-    "status": true,
     "stock": 731,
-    "category": "tequila",
-    "thumbnails": [
-      "https://corpovino.com/cdn/shop/files/Don_Julio_70_Caja.png?v=1752779614",
-      "https://i5.walmartimages.com.mx/mg/gm/1p/images/product-images/img_large/00500028105626l.jpg?odnHeight=612&odnWidth=612&odnBg=FFFFFF"
-    ],
     "id": "002"
+  },
+  {
+    "title": "Blue Label Johnny Walker",
+    "description": "Whisky Label Johnny Walker 750ml",
+    "price": 99.99,
+    "stock": 21,
+    "id": "003"
   }
 ]

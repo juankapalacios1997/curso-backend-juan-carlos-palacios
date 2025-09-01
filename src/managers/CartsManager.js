@@ -24,13 +24,25 @@ export class CartsManager{
         }
     }
 
-    async createCart() {
+    async getCartByName(name) {
+        try {
+            const data = await fs.readFile(pathFile, 'utf-8');
+            const { carts } = JSON.parse(data);
+
+            return carts.find(product => product.name === name);
+        } catch (error) {
+            return [];
+        }
+    }
+
+    async createCart(name) {
         const data = await this.fetchAllCarts();
 
         console.log(typeof data.carts, "data");
         
         const newCart = {
             id: `01${data.carts.length + 1}`,
+            name: name,
             products: [],
         }
 
