@@ -1,1 +1,0 @@
-listaUsuarios.innerHTML += `<li>Huevos pa' todos</li>`;
