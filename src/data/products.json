@@ -3,7 +3,7 @@
     "title": "Don Julio 70",
     "description": "Tequila Don Julio 70 750ml",
     "code": "1014",
-    "price": 69.99,
+    "price": 39.99,
     "status": true,
     "stock": 731,
     "category": "tequila",
@@ -14,10 +14,10 @@
     "id": "001"
   },
   {
-    "title": "Don Julio 70",
-    "description": "Tequila Don Julio 70 750ml",
+    "title": "1800 Cristalino",
+    "description": "Tequila 1800 Cristalino 750ml",
     "code": "1014",
-    "price": 69.99,
+    "price": 49.99,
     "status": true,
     "stock": 731,
     "category": "tequila",

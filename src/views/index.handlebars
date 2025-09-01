@@ -1,9 +1,22 @@
 <div>
     <h1>Bienvenido a La Vinateria "La Gran Bodega"</h1>
     <h2>Nuestros productos:</h2>
-    <ul id="listaUsuarios">
+    <ul id="listaUsuarios" style="list-style: none;">
         {{#each products}}
-            <li>{{ this.title }}</li>
+            <li style="max-width: 22vw; margin: 12px; padding: 22px; background-color: rgb(165, 0, 0); color: white;">
+                <div>
+                    {{ this.title }}
+                </div>
+                <div>
+                    {{ this.description }}
+                </div>
+                <div>
+                    ${{ this.price }}
+                </div>
+                <div style="margin-top: 12px;">
+                    <button>AAA</button>
+                </div>
+            </li>
         {{/each}}
     </ul>
 </div>
