@@ -58,6 +58,8 @@ export class ProductManager{
         products[toEditProductIndex] = toEditProduct;
 
         await fs.writeFile(pathFile, JSON.stringify(products, null, 2));
+
+        this.io.emit("productUpdated", {...product, id: id});
         return toEditProduct;
     }
 
@@ -67,5 +69,7 @@ export class ProductManager{
         const filteredProducts = products.filter(product => product.id !== id);
 
         await fs.writeFile(pathFile, JSON.stringify(filteredProducts, null, 2));
+
+        this.io.emit("productDeleted", id);
     }
 }
