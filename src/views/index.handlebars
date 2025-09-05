@@ -1,9 +1,9 @@
 <div style="width: 100%;">
     <h1>Bienvenido a La Vinateria "La Gran Bodega"</h1>
     <div style="display: flex;">
-        <div style="width: 50%">
+        <div style="width: 100%;">
             <h2>Nuestros productos:</h2>
-            <ul id="listaUsuarios" style="list-style: none;">
+            <ul id="listaProductos" style="list-style: none; display: grid; grid-template-columns: 1fr 1fr 1fr;">
                 {{#each products}}
                     <li style="max-width: 22vw; margin: 12px; padding: 22px; background-color: rgb(165, 0, 0); color: white;">
                         <div>
@@ -19,52 +19,14 @@
                             {{ this.stock }}
                         </div>
                         <div style="margin-top: 12px;">
-                            <button>Add to cart</button>
+                            <button id="deleteBtn">Delete</button>
                         </div>
                     </li>
                 {{/each}}
             </ul>
         </div>
-        <div style="width: 50%">
-            <h2>Tu carrito:</h2>
-            <ul id="cartList" style="list-style: none;">
-                <li>No hay elementos en tu carrito</li>
-            </ul>
-        </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-Swal.fire({
-    title: "Identifícate",
-    input: "text",
-    text: "Ingresa usuario para identificarse en el chat",
-    inputValidator: (value) => {
-        return !value && "Necesitas poner un usuario";
-    },
-    allowOutsideClick: false,
-}).then(async (res) => {
-    const user = res.value;
-    const userCart = await fetch(`http://localhost:8080/carts?name=${encodeURIComponent(user)}`)
-        .then(r => r.json());
-
-    if (!userCart.products.length) {
-        return;
-    }
-
-    const cartList = document.getElementById("cartList");
-    cartList.innerHTML = "";
-
-    userCart.products.forEach(p => {
-        const li = document.createElement("li");
-        li.style.cssText = "max-width:22vw;margin:12px;padding:22px;background-color:rgb(165,0,0);color:white;";
-        li.innerHTML = `
-            <div>${p.title}</div>
-            <div>${p.description}</div>
-            <div>$${p.price}</div>
-        `;
-        cartList.appendChild(li);
-    });
-});
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+<script src="js/main.js"></script>

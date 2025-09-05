@@ -1,23 +1,23 @@
 [
   {
-    "title": "Don Julio 70",
-    "description": "Tequila Don Julio 70 750ml",
-    "price": 39.99,
-    "stock": 731,
-    "id": "001"
-  },
-  {
-    "title": "1800 Cristalino",
-    "description": "Tequila 1800 Cristalino 750ml",
-    "price": 49.99,
-    "stock": 731,
-    "id": "002"
-  },
-  {
     "title": "Blue Label Johnny Walker",
     "description": "Whisky Label Johnny Walker 750ml",
     "price": 99.99,
     "stock": 21,
+    "id": "001"
+  },
+  {
+    "title": "Don Julio 70",
+    "description": "Tequila Don Julio 70 750ml",
+    "price": 49.99,
+    "stock": 45,
+    "id": "002"
+  },
+  {
+    "title": "Jack Daniels",
+    "description": "Whisky Jack Daniels 750ml",
+    "price": 29.99,
+    "stock": 890,
     "id": "003"
   }
 ]

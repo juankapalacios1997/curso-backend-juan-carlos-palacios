@@ -3,11 +3,18 @@ import fs from 'fs/promises';
 const pathFile = './src/data/products.json';
 
 export class ProductManager{
+    constructor(io) {
+        this.io = io;
+    }
+
     async fetchAllProducts() {
         try {
             const data = await fs.readFile(pathFile, 'utf-8');
 
-            return JSON.parse(data);
+            const json = JSON.parse(data);
+
+            return json;
+
         } catch (error) {
             return [];
         }
@@ -30,6 +37,8 @@ export class ProductManager{
         products.push(product);
 
         await fs.writeFile(pathFile, JSON.stringify(products, null, 2));
+
+        this.io.emit("productAdded", product);
         return product;
     }
 
@@ -37,8 +46,6 @@ export class ProductManager{
         const products = await this.fetchAllProducts();
 
         const toEditProductIndex = products.findIndex(product => product.id === id);
-
-        console.log(toEditProductIndex);
         
         if (toEditProductIndex < 0) return;
 
@@ -50,8 +57,6 @@ export class ProductManager{
 
         products[toEditProductIndex] = toEditProduct;
 
-        console.log(products[toEditProduct]);
-
         await fs.writeFile(pathFile, JSON.stringify(products, null, 2));
         return toEditProduct;
     }
@@ -60,8 +65,6 @@ export class ProductManager{
         const products = await this.fetchAllProducts();
 
         const filteredProducts = products.filter(product => product.id !== id);
-
-        console.log(filteredProducts);
 
         await fs.writeFile(pathFile, JSON.stringify(filteredProducts, null, 2));
     }

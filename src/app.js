@@ -1,5 +1,6 @@
 import express from 'express';
 import { engine } from 'express-handlebars';
+import { Server } from 'socket.io';
 
 import productsRouter from './routers/products.router.js';
 import cartsRouter from './routers/carts.router.js';
@@ -17,10 +18,16 @@ app.set("views", "./src/views");
 
 app.use(express.static("./src/public"));
 
-app.use('/products', productsRouter);
+const httpServer = app.listen((PORT), () => {
+    console.log(`Servidor funcionando en puerto ${PORT}`)
+});
+
+const io = new Server(httpServer);
+
+app.use('/products', productsRouter(io));
 app.use('/carts', cartsRouter);
 
-const productManager = new ProductManager();
+const productManager = new ProductManager(io);
 
 app.get('/', async (req, res) => {
     const products = await productManager.fetchAllProducts();
@@ -28,7 +35,7 @@ app.get('/', async (req, res) => {
     res.render("index", { products });
 });
 
-app.listen((PORT), () => {
-    console.log(`Servidor funcionando en puerto ${PORT}`)
-});
+io.on("connection", async (socket) => {
+    console.log("usuario conectado");
+})
 
