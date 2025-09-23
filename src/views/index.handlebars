@@ -5,7 +5,7 @@
             <h2>Nuestros productos:</h2>
             <ul id="listaProductos" style="list-style: none; display: grid; grid-template-columns: 1fr 1fr 1fr;">
                 {{#each products}}
-                    <li id="product-{{this.id}}" style="max-width: 22vw; margin: 12px; padding: 22px; background-color: rgb(165, 0, 0); color: white; border-radius: 24px;">
+                    <li id="product-{{this._id}}" style="max-width: 22vw; margin: 12px; padding: 22px; background-color: rgb(165, 0, 0); color: white; border-radius: 24px;">
                         <div>
                             {{ this.title }}
                         </div>

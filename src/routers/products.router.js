@@ -8,12 +8,12 @@ export default function productsRouter(io) {
     router.get('/', async(req, res) => {
         const { limit, page, sortPrice } = req.query;
 
-        const products = await manager.fetchAllProducts({
+        const { payload } = await manager.fetchAllProducts({
             limit: limit ? parseInt(limit) : 10,
             page: page ? parseInt(page) : 1,
             sortPrice: sortPrice,
         });
-        res.json(products); 
+        res.json(payload); 
     });
 
     router.get('/:id', async(req, res) => {

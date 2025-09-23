@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { response } from 'express';
 import mongoose from 'mongoose';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io';
@@ -33,9 +33,13 @@ app.use('/carts', cartsRouter);
 const productManager = new ProductManager(io);
 
 app.get('/', async (req, res) => {
-    const products = await productManager.fetchAllProducts();
+    const responseObj = await productManager.fetchAllProducts();
 
-    res.render("index", { products });
+    const { payload } = responseObj;
+
+    console.log(payload);
+
+    res.render("index", { products: payload });
 });
 
 io.on("connection", async (socket) => {

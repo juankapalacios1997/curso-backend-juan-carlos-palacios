@@ -5,7 +5,7 @@ export class ProductManager{
         this.io = io;
     }
 
-    async fetchAllProducts({limit = 10, page = 1, sortPrice}) {
+    async fetchAllProducts({ limit = 10, page = 1, sortPrice } = {}) {
         try {
             let query = productsModel.find().lean();
 
@@ -15,17 +15,37 @@ export class ProductManager{
                 query = query.sort({ price: -1 });
             }
 
+            const totalDocs = await productsModel.countDocuments();
+
+            let data;
+
             if (limit && Number.isInteger(limit) && limit > 0) {
-                query.limit(limit).skip((page - 1) * limit);
+                data = await query.limit(limit).skip((page - 1) * limit);
+            } else {
+                data = await query;
             }
 
-            const data = await query;
+            const totalPages = limit ? Math.ceil(totalDocs / limit) : 1;
 
-            return data;
+            return {
+                status: "success",
+                payload: data,
+                totalPages,
+                prevPage: page > 1 ? page - 1 : null,
+                nextPage: page < totalPages ? page + 1 : null,
+                page,
+                hasPrevPage: page > 1,
+                hasNextPage: page < totalPages,
+                prevLink: page > 1 ? `/api/products?limit=${limit}&page=${page - 1}${sortPrice ? `&sortPrice=${sortPrice}` : ""}` : null,
+                nextLink: page < totalPages ? `/api/products?limit=${limit}&page=${page + 1}${sortPrice ? `&sortPrice=${sortPrice}` : ""}` : null,
+            };
 
         } catch (error) {
             console.error(error);
-            return [];
+            return {
+                status: "error",
+                payload: []
+            };
         }
     }
 
