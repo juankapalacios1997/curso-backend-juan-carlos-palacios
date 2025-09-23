@@ -38,6 +38,5 @@ socket.on("productDeleted", (id) => {
 
     const old = document.getElementById(`product-${id}`);
 
-    console.log(old);
     old.remove(old);
 });

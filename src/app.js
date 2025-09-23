@@ -37,8 +37,6 @@ app.get('/', async (req, res) => {
 
     const { payload } = responseObj;
 
-    console.log(payload);
-
     res.render("index", { products: payload });
 });
 
