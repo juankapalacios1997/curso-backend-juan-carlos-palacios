@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io';
 
@@ -9,6 +10,8 @@ import { ProductManager } from './managers/ProductManager.js';
 
 const app = express();
 const PORT = 8080;
+
+mongoose.connect("mongodb+srv://jcmaster97_db_user:F9TseZ4AXvjoq1dY@testcluster.tq5mbma.mongodb.net/vinateria?retryWrites=true&w=majority&appName=TestCluster");
 
 app.use(express.json());
 
