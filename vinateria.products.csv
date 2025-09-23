@@ -1,0 +1,13 @@
+_id,title,description,price,stock,createdAt,updatedAt,__v
+68d223c20ba01331393ee720,Tequila Don Ramon,Tequila Don Ramon 750ml,59.99,61,2025-09-23T04:36:18.407Z,2025-09-23T04:36:18.407Z,0
+68d226dfd61ae7f38bdecb9d,Ron Bacardi Spiced,Ron Bacardi Spiced 750ml,19.99,251,2025-09-23T04:49:35.529Z,2025-09-23T04:49:35.529Z,0
+68d2280bf2bc2a0fe8a410d4,Tequila Don Julio 70,Tequila Don Julio 70 750ml,49.99,132,,,
+68d2285df2bc2a0fe8a410d5,Brandy Torres 10,Brandy Torres 10 750ml,44.99,78,,,
+68d22878f2bc2a0fe8a410d6,Mezcal 400 Conejos,Mezcal 400 Conejos 700ml,59.99,108,,,
+68d228fcf2bc2a0fe8a410d8,Ron Jim Beam Honey,Ron Jim Beam Honey 750ml,39.99,94,,,
+68d22943f2bc2a0fe8a410d9,Licor de hierbas Jaegermeister,Licor de hierbas Jaegermeister 700ml,34.99,210,,,
+68d22a0cf2bc2a0fe8a410da,Tequila 1800 Cristalino,Tequila 1800 Cristalino 750ml,59.99,67,,,
+68d22a36f2bc2a0fe8a410db,Whisky Johnny Walker Black Label,Whisky Johnny Walker Black Label,69.99,62,,,
+68d22a5ff2bc2a0fe8a410dc,Vino Casillero del Diablo Tinto Cabernet,Vino Casillero del Diablo Cabernet 1L,29.99,167,,,
+68d22a8ff2bc2a0fe8a410dd,Tequila El Jimador Blanco,Tequila El Jimador Blanco 750ml,29.99,217,,,
+68d22ad1f2bc2a0fe8a410de,Vino Freixenet Rosado Espumoso,Vino Freixenet Rosado Espumoso 1ml,44.99,93,,,
