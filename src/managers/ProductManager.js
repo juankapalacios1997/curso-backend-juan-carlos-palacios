@@ -5,13 +5,26 @@ export class ProductManager{
         this.io = io;
     }
 
-    async fetchAllProducts() {
+    async fetchAllProducts({limit = 10, page = 1, sortPrice}) {
         try {
-            const data = await productsModel.find().lean();
+            let query = productsModel.find().lean();
+
+            if (sortPrice === "asc") {
+                query = query.sort({ price: 1 });
+            } else if (sortPrice === "desc") {
+                query = query.sort({ price: -1 });
+            }
+
+            if (limit && Number.isInteger(limit) && limit > 0) {
+                query.limit(limit).skip((page - 1) * limit);
+            }
+
+            const data = await query;
 
             return data;
 
         } catch (error) {
+            console.error(error);
             return [];
         }
     }
@@ -22,28 +35,41 @@ export class ProductManager{
 
             return product;
         } catch (error) {
+            console.error(error);
             return [];
         }
     }
 
     async saveProduct(product) {
-        const newProduct = await productsModel.create(product);
+        try {
+            const newProduct = await productsModel.create(product);
 
-        this.io.emit("productAdded", newProduct);
-        return newProduct;
+            this.io.emit("productAdded", newProduct);
+            return newProduct;
+        } catch(error) {
+            console.error(error);
+        }
     }
 
     async updateProduct(id, product) {
-        const updatedProduct = await productsModel.findByIdAndUpdate(id, product);
+        try {
+            const updatedProduct = await productsModel.findByIdAndUpdate(id, product);
 
-        this.io.emit("productUpdated", updatedProduct);
+            this.io.emit("productUpdated", updatedProduct);
 
-        return updatedProduct;
+            return updatedProduct;
+        } catch(error) {
+            console.error(error);
+        }
     }
 
     async deleteProduct(id) {
-        await productsModel.findByIdAndDelete(id);
+        try {
+            await productsModel.findByIdAndDelete(id);
 
-        this.io.emit("productDeleted", id);
+            this.io.emit("productDeleted", id);
+        } catch(error) {
+            console.error(error);
+        }
     }
 }
