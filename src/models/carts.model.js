@@ -1,8 +1,6 @@
 import mongoose from 'mongoose'
 
 export const cartsModel = mongoose.model('carts', new mongoose.Schema({
-    id: String,
-    name: String,
     products: [
         {
             title: String,
