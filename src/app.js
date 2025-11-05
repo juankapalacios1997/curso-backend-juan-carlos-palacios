@@ -15,6 +15,7 @@ import usersRouter from './routers/users.router.js';
 
 import { ProductManager } from './managers/ProductManager.js';
 import { UsersManager } from './managers/UsersManager.js';
+import { CartsManager } from './managers/CartsManager.js';
 
 const app = express();
 const PORT = 8080;
@@ -42,21 +43,32 @@ const httpServer = app.listen((PORT), () => {
 const io = new Server(httpServer);
 
 app.use('/products', productsRouter(io));
-app.use('/carts', cartsRouter);
+app.use('/carts', cartsRouter());
 app.use('/users', usersRouter());
 
 const productManager = new ProductManager(io);
 const usersManager = new UsersManager();
+const cartsManager = new CartsManager();
 
 app.get('/', passport.authenticate("current", {
     session: false,
     failureRedirect: "/login"
 }), async (req, res) => {
-    const responseObj = await productManager.fetchAllProducts();
+    const cartResponseObjPayload = (await cartsManager.fetchSingleCartByUserId(req.user?._id)).payload;
 
-    const { payload } = responseObj;
+    const productsResponseObjPayload = (await productManager.fetchAllProducts()).payload;
+    
+    const productsToDisplay = [];
+    
+    cartResponseObjPayload?.products.forEach(product => {
+        const productIndex = productsResponseObjPayload.findIndex(item => item?._id == product.id);
 
-    res.render("index", { products: payload });
+        if (productIndex < 0) return;
+
+        productsToDisplay.push({ product: productsResponseObjPayload[productIndex], quantity: product.quantity });
+    });
+
+    res.render("index", { products: productsResponseObjPayload, cart: { id: cartResponseObjPayload?._id, products: productsToDisplay } });
 });
 
 app.get('/login', (req, res) => {
@@ -81,7 +93,8 @@ app.post('/login', async (req,res)=>{
 
     res.cookie("tokenCookie", token, { httpOnly: true });
     
-    res.redirect('/');
+    res.status(200)
+        .redirect('/');
 });
 
 app.get("/logout", (req, res)=>{
@@ -93,7 +106,7 @@ app.get("/logout", (req, res)=>{
 app.get('/user', passport.authenticate("current", {session: false, failureRedirect: "/error"}), (req,res)=>{
     res.setHeader('Content-Type','application/json');
     res.status(200).json({
-        mensaje:'Perfil usuario '+req.user.nombre,
+        mensaje:'Perfil usuario '+ req.user.nombre,
     });
 });
 

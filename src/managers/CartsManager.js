@@ -3,9 +3,12 @@ import { cartsModel } from "../models/carts.model.js";
 export class CartsManager {
     async fetchSingleCart(id) {
         try {
-            const cart = await cartsModel.findById(id);
+            const cart = await cartsModel.findById(id).lean();
 
-            return cart;
+            return {
+                status: "success",
+                payload: cart,
+            };
         } catch (error) {
             return [];
         }
@@ -23,31 +26,38 @@ export class CartsManager {
 
     async fetchSingleCartByUserId(userId) {
         try {
-            const cart = await cartsModel.findOne({ user_id: userId });
+            const cart = await cartsModel.findOne({ user_id: userId }).lean();
 
-            return cart;
+            return {
+                status: "success",
+                payload: cart,
+            };
         } catch (error) {
             return [];
         }
     }
 
-    async updateCart(id, product) {       
-        const toEditCart = await this.fetchSingleCart(id);
+    async updateCart(id, pid) {       
+        const { payload } = await this.fetchSingleCart(id);
 
-        if (!toEditCart) {
+        if (!payload) {
             throw new Error("Cannot find cart");
         }
 
-        const productIndex = toEditCart.products.findIndex(item => item.id === product.id);
+        const toEditCartProducts = payload.products;
+
+        const productIndex = toEditCartProducts.findIndex(item => item.id === pid);
 
         if (productIndex >= 0) {
-            toEditCart.products[productIndex].quantity++;
+            toEditCartProducts[productIndex].quantity++;
         } else {
-            toEditCart.products.push({...product, quantity: 1});
+            toEditCartProducts.push({ id: pid, quantity: 1 });
         }
 
-        await cartsModel.findByIdAndUpdate(id, toEditCart);
+        const updatedCart = await cartsModel.findByIdAndUpdate(id, {
+            products: [...toEditCartProducts],
+        });
 
-        return toEditCart;
+        return updatedCart;
     }
 }

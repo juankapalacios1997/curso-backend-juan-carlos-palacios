@@ -17,9 +17,9 @@ export const initializePassport = () =>{
             secretOrKey: "LaGranBodega123", 
             jwtFromRequest: passportJWT.ExtractJwt.fromExtractors([searchToken]),
         }, 
-        async (contenidoToken, done) => {
+        async (jwtPayload, done) => {
             try {
-                return done(null, contenidoToken);
+                return done(null, jwtPayload);
             } catch (error) {
                 return done(error);
             }

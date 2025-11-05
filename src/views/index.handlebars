@@ -22,6 +22,27 @@
                 {{/each}}
             </ul>
         </div>
+        <div style="width: 100%;">
+            <h2>Tu carrito:</h2>
+            <ul id="listaProductos" style="list-style: none; display: grid; grid-template-columns: 1fr 1fr 1fr;">
+                {{#each cart.products}}
+                    <li id="product-{{this.id}}" style="max-width: 22vw; margin: 12px; padding: 22px; background-color: rgb(0, 165, 0); color: white; border-radius: 24px;">
+                        <div>
+                            {{ this.product.title }}
+                        </div>
+                        <div>
+                            {{ this.product.description }}
+                        </div>
+                        <div>
+                            ${{ this.product.price }}
+                        </div>
+                        <div>
+                            {{ this.quantity }}
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
     </div>
 </div>
 

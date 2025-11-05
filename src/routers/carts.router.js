@@ -8,17 +8,6 @@ export default function cartsRouter() {
 
     const productManager = new ProductManager();
 
-    router.get('/', async(req, res) => {
-        try {
-            const carts = await manager.fetchAllCarts();
-            res.json(carts);
-
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: "Internal server error" });
-        }
-    });
-
     router.post('/', async(req, res) => {
         await manager.createCart();
         res.status(201).json({ message: "Product added successfully" });
@@ -31,17 +20,17 @@ export default function cartsRouter() {
         res.json(cart); 
     });
 
-    router.post('/:id/product/:pid', async(req, res) => {
+    router.put('/:id/product/:pid', async(req, res) => {
         const { id, pid } = req.params;
 
-        const addedProduct = await productManager.fetchSingleProduct(pid);
-
-        if (!addedProduct) {
+        if (!pid) {
             return res.status(404).json({ message: "Could not find product" });;
         }
 
-        const product = await manager.updateCart(id, addedProduct);
+        const response = await manager.updateCart(id, pid);
 
-        res.status(201).json({ message: "Product getted successfully", product });
+        res.status(201).json({ message: "Producto anadido al carrito correctamente", response });
     })
+
+    return router;
 }
