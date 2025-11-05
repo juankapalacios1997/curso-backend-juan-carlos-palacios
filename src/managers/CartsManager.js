@@ -1,42 +1,34 @@
-import fs from 'fs/promises';
+import { cartsModel } from "../models/carts.model.js";
 
-const pathFile = './src/data/carts.json';
-
-export class CartsManager{
-    async fetchAllCarts() {
-        try {
-            const data = await fs.readFile(pathFile, 'utf-8');
-
-            return JSON.parse(data);
-        } catch (error) {
-            return [];
-        }
-    }
-
+export class CartsManager {
     async fetchSingleCart(id) {
         try {
-            const data = await fs.readFile(pathFile, 'utf-8');
-            const { carts } = JSON.parse(data);
+            const cart = await cartsModel.findById(id);
 
-            return carts.find(product => product.id === id);
+            return cart;
         } catch (error) {
             return [];
         }
     }
 
-    async createCart(name) {
-        const data = await this.fetchAllCarts();
-        
-        const newCart = {
-            id: `01${data.carts.length + 1}`,
-            name: name,
-            products: [],
+    async saveCart(cart) {
+        try {
+            const newCart = await cartsModel.create(cart);
+
+            return newCart;
+        } catch(error) {
+            console.error(error);
         }
+    }
 
-        data.carts.push(newCart);
+    async fetchSingleCartByUserId(userId) {
+        try {
+            const cart = await cartsModel.findOne({ user_id: userId });
 
-        await fs.writeFile(pathFile, JSON.stringify(data, null, 2));
-        return newCart;
+            return cart;
+        } catch (error) {
+            return [];
+        }
     }
 
     async updateCart(id, product) {       
@@ -54,21 +46,8 @@ export class CartsManager{
             toEditCart.products.push({...product, quantity: 1});
         }
 
+        await cartsModel.findByIdAndUpdate(id, toEditCart);
 
-        const { carts } = await this.fetchAllCarts();
-
-        if (!carts.length) {
-            throw new Error("Cannot find cart");
-        }
-
-        const cartIndex = carts.findIndex(cart => cart.id === id);
-        carts[cartIndex] = toEditCart;
-
-        const newObject = {
-            carts: carts
-        }
-        await fs.writeFile(pathFile, JSON.stringify(newObject, null, 2));
-
-        return newObject;
+        return toEditCart;
     }
 }

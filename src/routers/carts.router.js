@@ -2,46 +2,46 @@ import { Router } from "express";
 import { CartsManager } from '../managers/CartsManager.js';
 import { ProductManager } from "../managers/ProductManager.js";
 
-const router = Router();
-const manager = new CartsManager();
+export default function cartsRouter() {
+    const router = Router();
+    const manager = new CartsManager();
 
-const productManager = new ProductManager();
+    const productManager = new ProductManager();
 
-router.get('/', async(req, res) => {
-    try {
-        const carts = await manager.getAllCarts();
-        res.json(carts);
+    router.get('/', async(req, res) => {
+        try {
+            const carts = await manager.fetchAllCarts();
+            res.json(carts);
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    });
 
-router.post('/', async(req, res) => {
-    await manager.createCart();
-    res.status(201).json({ message: "Product added successfully" });
-});
+    router.post('/', async(req, res) => {
+        await manager.createCart();
+        res.status(201).json({ message: "Product added successfully" });
+    });
 
-router.get('/:id', async(req, res) => {
-    const { id } = req.params;
+    router.get('/:id', async(req, res) => {
+        const { id } = req.params;
 
-    const cart = await manager.fetchSingleCart(id);
-    res.json(cart); 
-});
+        const cart = await manager.fetchSingleCart(id);
+        res.json(cart); 
+    });
 
-router.post('/:id/product/:pid', async(req, res) => {
-    const { id, pid } = req.params;
+    router.post('/:id/product/:pid', async(req, res) => {
+        const { id, pid } = req.params;
 
-    const addedProduct = await productManager.fetchSingleProduct(pid);
+        const addedProduct = await productManager.fetchSingleProduct(pid);
 
-    if (!addedProduct) {
-        return res.status(404).json({ message: "Could not find product" });;
-    }
+        if (!addedProduct) {
+            return res.status(404).json({ message: "Could not find product" });;
+        }
 
-    const product = await manager.updateCart(id, addedProduct);
+        const product = await manager.updateCart(id, addedProduct);
 
-    res.status(201).json({ message: "Product getted successfully", product });
-})
-
-export default router;
+        res.status(201).json({ message: "Product getted successfully", product });
+    })
+}

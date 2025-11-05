@@ -1,13 +1,11 @@
 import mongoose from 'mongoose'
 
 export const cartsModel = mongoose.model('carts', new mongoose.Schema({
+    user_id: String,
     products: [
         {
-            title: String,
-            description: String,
-            price: Number,
-            stock: Number,
+            id: String,
             quantity: Number
         }
-    ]
+    ],
 }, {timestamps: true}));

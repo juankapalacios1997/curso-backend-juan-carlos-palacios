@@ -11,6 +11,7 @@ import { initializePassport } from './config/passport.config.js';
 
 import productsRouter from './routers/products.router.js';
 import cartsRouter from './routers/carts.router.js';
+import usersRouter from './routers/users.router.js';
 
 import { ProductManager } from './managers/ProductManager.js';
 import { UsersManager } from './managers/UsersManager.js';
@@ -42,6 +43,7 @@ const io = new Server(httpServer);
 
 app.use('/products', productsRouter(io));
 app.use('/carts', cartsRouter);
+app.use('/users', usersRouter());
 
 const productManager = new ProductManager(io);
 const usersManager = new UsersManager();
@@ -55,31 +57,6 @@ app.get('/', passport.authenticate("current", {
     const { payload } = responseObj;
 
     res.render("index", { products: payload });
-});
-
-app.post('/register', async (req,res)=>{
-    let { first_name, last_name, email, age, password, role } = req.body
-    if(!first_name || !last_name || !email || !password) return res.status(400).send({ error:'Favor de ingresar todos los datos' });
-
-    let user = await usersManager.fetchSingleUserByEmail(email);
-
-    if (user) return res.status(400).send({ error:`El usuario con email ${email} ya fue registrado.` })
-
-    let newUser = {
-        first_name, 
-        last_name,
-        email,
-        age,
-        password: bcrypt.hashSync(password, 10),
-        cart_id: "",
-        role: role ?? "user",
-    }
-
-    await usersManager.saveUser(newUser);
-
-    res.json({
-        usuario: newUser,
-    })
 });
 
 app.get('/login', (req, res) => {
@@ -108,23 +85,23 @@ app.post('/login', async (req,res)=>{
 });
 
 app.get("/logout", (req, res)=>{
-
     res.clearCookie("tokenCookie")
     res.setHeader('Content-Type','application/json');
     return res.status(200).json({ payload:`Logout success` });
 });
 
 app.get('/user', passport.authenticate("current", {session: false, failureRedirect: "/error"}), (req,res)=>{
-
-
     res.setHeader('Content-Type','application/json');
     res.status(200).json({
         mensaje:'Perfil usuario '+req.user.nombre,
     });
 });
 
-app.get("/error", (req, res)=>{
+app.get('/new-user', (req, res) => {
+    res.render("new-user");
+});
 
+app.get("/error", (req, res)=>{
     res.setHeader('Content-Type','application/json');
     return res.status(401).json({error:`Oops! Contenido no disponible, intente mas tarde`, detalle: "Haga login...!!!"});
 })

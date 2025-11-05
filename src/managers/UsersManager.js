@@ -1,10 +1,6 @@
 import { usersModel } from "../models/users.model.js";
 
 export class UsersManager {
-    // constructor(io) {
-    //     this.io = io;
-    // }
-
     async fetchAllUsers() {
         try {
             let query = usersModel.find().lean();
@@ -57,7 +53,7 @@ export class UsersManager {
         }
     }
 
-    async updateUser(id, product) {
+    async updateUser(id, user) {
         try {
             const updatedUser = await usersModel.findByIdAndUpdate(id, user);
 
