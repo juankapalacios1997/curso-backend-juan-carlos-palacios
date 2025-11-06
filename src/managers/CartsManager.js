@@ -53,8 +53,6 @@ export class CartsManager {
 
         const productIndex = toEditCartProducts.findIndex(item => item.id.toString() === pid);
 
-        console.log(productIndex)
-
         if (productIndex < 0) {
             toEditCartProducts.push({ id: pid, quantity: 1 });
         } else {
