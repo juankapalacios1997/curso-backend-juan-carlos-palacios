@@ -54,7 +54,6 @@ app.get('/', passport.authenticate("current", {
     session: false,
     failureRedirect: "/login"
 }), async (req, res) => {
-
     const cartResponseObjPayload = (await cartsManager.fetchSingleCartByUserId(req.user?._id)).payload;
     const productsResponseObjPayload = (await productManager.fetchAllProducts()).payload;
 
@@ -111,12 +110,12 @@ app.get("/logout", (req, res)=>{
     return res.status(200).json({ payload:`Logout success` });
 });
 
-app.get('/user', passport.authenticate("current", {session: false, failureRedirect: "/error"}), (req,res)=>{
-    res.setHeader('Content-Type','application/json');
-    res.status(200).json({
-        mensaje:'Perfil usuario '+ req.user.nombre,
-    });
-});
+// app.get('/user', passport.authenticate("current", {session: false, failureRedirect: "/error"}), (req,res)=>{
+//     res.setHeader('Content-Type','application/json');
+//     res.status(200).json({
+//         mensaje:'Perfil usuario '+ req.user.nombre,
+//     });
+// });
 
 app.get('/new-user', (req, res) => {
     res.render("new-user");

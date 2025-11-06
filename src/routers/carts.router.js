@@ -1,16 +1,15 @@
 import { Router } from "express";
 import { CartsManager } from '../managers/CartsManager.js';
-// import { ProductManager } from "../managers/ProductManager.js";
+import { authUser } from "../middleware/auth/auth.js";
+import passport from "passport";
 
 export default function cartsRouter(io) {
     const router = Router();
     const manager = new CartsManager(io);
 
-    // const productManager = new ProductManager();
-
     router.post('/', async(req, res) => {
-        await manager.createCart();
-        res.status(201).json({ message: "Product added successfully" });
+        await manager.saveCart();
+        res.status(201).json({ message: "Carrito creado con exito" });
     });
 
     router.get('/:id', async(req, res) => {
@@ -20,7 +19,10 @@ export default function cartsRouter(io) {
         res.json(cart); 
     });
 
-    router.put('/:id', async(req, res) => {
+    router.put('/:id', passport.authenticate("current", {
+            session: false,
+            failureRedirect: "/login",
+    }), authUser, async(req, res) => {
         const { id } = req.params;
 
         const { pid } = req.body;

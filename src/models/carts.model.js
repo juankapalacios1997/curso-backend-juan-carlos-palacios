@@ -14,7 +14,7 @@ export const cartsModel = mongoose.model('carts', new mongoose.Schema({
                 type: Number,
                 required: true,
                 min: 1
-            }
+            },
         }
     ],
 }, {timestamps: true}));

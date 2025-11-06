@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { ProductManager } from '../managers/ProductManager.js';
+import { authAdmin } from "../middleware/auth/auth.js";
+import passport from "passport";
 
 export default function productsRouter(io) {
     const router = Router();
@@ -23,7 +25,10 @@ export default function productsRouter(io) {
         res.json(product); 
     });
 
-    router.post('/', async(req, res) => {
+    router.post('/', passport.authenticate("current", {
+        session: false,
+        failureRedirect: "/login",
+    }), authAdmin, async(req, res) => {
         const product = req.body;
 
         const { title, description, price, stock } = product;
@@ -36,7 +41,7 @@ export default function productsRouter(io) {
         res.status(201).json({ message: "Product added successfully", product });
     });
 
-    router.put('/:id', async(req, res) => {
+    router.put('/:id', authAdmin, async(req, res) => {
         const { id } = req.params;
         const product = req.body;
 
