@@ -2,6 +2,10 @@ const socket = io("http://localhost:8080");
 
 const listaProductos = document.getElementById("listaProductos");
 
+const cartProducts = document.getElementById("cartProducts");
+
+const addToCartButtons = document.querySelectorAll(".add-to-cart-btn");
+
 function renderProduct(product) {
     const li = document.createElement("li");
     li.id = `product-${product.id}`;
@@ -12,9 +16,53 @@ function renderProduct(product) {
         <div>${product.description}</div>
         <div>$${product.price}</div>
         <div>${product.stock}</div>
+        <button class="add-to-cart" data-id="${product.id}">Add to cart</button>
     `;
     return li;
 }
+
+function renderCartProduct(item) {
+    const li = document.createElement("li");
+    li.id = `cart-${item.product._id}`;
+    li.style =
+        "max-width: 22vw; margin: 12px; padding: 22px; background-color: rgb(0, 165, 0); color: white; border-radius: 24px;";
+    li.innerHTML = `
+        <div>${item.product.title}</div>
+        <div>$${item.product.price}</div>
+        <div>${item.quantity}</div>
+    `;
+    return li;
+}
+
+// function addToCart(pid) {
+//     console.log(pid);
+// }
+
+// addToCartButtons.forEach(btn => {
+//     btn.addEventListener("click", () => {
+//         const productId = btn.dataset.id;
+//         console.log("Adding product:", productId);
+
+//         // socket.emit("addToCart", productId);
+//     });
+// });
+
+listaProductos.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("add-to-cart-btn")) {
+        const cartId = e.target.dataset.cid;
+        const productId = e.target.dataset.pid;
+
+        await fetch(`http://localhost:8080/carts/${cartId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                pid: productId,
+            }),
+        })
+    }
+});
 
 socket.on("connect", () => console.log("connected", socket.id));
 
@@ -39,4 +87,20 @@ socket.on("productDeleted", (id) => {
     const old = document.getElementById(`product-${id}`);
 
     old.remove(old);
+});
+
+socket.on("cartUpdated", (updatedCartItem) => {
+    console.log("Updated cart:", updatedCartItem);
+    
+    const li = renderCartProduct(updatedCartItem);
+
+    const cartItemClassName = `#cart-${updatedCartItem.product._id.toString()}`;
+    
+    const currentItem = document.querySelector(cartItemClassName);
+
+    if (currentItem) {
+        currentItem.remove(currentItem);
+    }
+    
+    cartProducts.appendChild(li);
 });

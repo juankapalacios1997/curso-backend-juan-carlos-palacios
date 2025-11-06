@@ -43,7 +43,7 @@ const httpServer = app.listen((PORT), () => {
 const io = new Server(httpServer);
 
 app.use('/products', productsRouter(io));
-app.use('/carts', cartsRouter());
+app.use('/carts', cartsRouter(io));
 app.use('/users', usersRouter());
 
 const productManager = new ProductManager(io);
@@ -54,21 +54,29 @@ app.get('/', passport.authenticate("current", {
     session: false,
     failureRedirect: "/login"
 }), async (req, res) => {
-    const cartResponseObjPayload = (await cartsManager.fetchSingleCartByUserId(req.user?._id)).payload;
 
+    const cartResponseObjPayload = (await cartsManager.fetchSingleCartByUserId(req.user?._id)).payload;
     const productsResponseObjPayload = (await productManager.fetchAllProducts()).payload;
-    
+
     const productsToDisplay = [];
-    
+
     cartResponseObjPayload?.products.forEach(product => {
-        const productIndex = productsResponseObjPayload.findIndex(item => item?._id == product.id);
+        const productIndex = productsResponseObjPayload.findIndex(item =>
+            item._id.toString() === product.id.toString()
+        );
 
         if (productIndex < 0) return;
 
-        productsToDisplay.push({ product: productsResponseObjPayload[productIndex], quantity: product.quantity });
+        productsToDisplay.push({
+            product: {... productsResponseObjPayload[productIndex], id: productsResponseObjPayload[productIndex]._id.toString()},
+            quantity: product.quantity
+        });
     });
 
-    res.render("index", { products: productsResponseObjPayload, cart: { id: cartResponseObjPayload?._id, products: productsToDisplay } });
+    res.render("index", {
+        products: productsResponseObjPayload,
+        cart: { id: cartResponseObjPayload._id, products: productsToDisplay }
+    });
 });
 
 app.get('/login', (req, res) => {

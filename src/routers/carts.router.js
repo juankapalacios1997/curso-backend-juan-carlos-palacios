@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { CartsManager } from '../managers/CartsManager.js';
-import { ProductManager } from "../managers/ProductManager.js";
+// import { ProductManager } from "../managers/ProductManager.js";
 
-export default function cartsRouter() {
+export default function cartsRouter(io) {
     const router = Router();
-    const manager = new CartsManager();
+    const manager = new CartsManager(io);
 
-    const productManager = new ProductManager();
+    // const productManager = new ProductManager();
 
     router.post('/', async(req, res) => {
         await manager.createCart();
@@ -20,8 +20,10 @@ export default function cartsRouter() {
         res.json(cart); 
     });
 
-    router.put('/:id/product/:pid', async(req, res) => {
-        const { id, pid } = req.params;
+    router.put('/:id', async(req, res) => {
+        const { id } = req.params;
+
+        const { pid } = req.body;
 
         if (!pid) {
             return res.status(404).json({ message: "Could not find product" });;
