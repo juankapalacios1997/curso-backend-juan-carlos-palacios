@@ -1,9 +1,11 @@
 import usersService from "../services/usersService.js";
-import { CartsManager } from '../managers/CartsManager.js';
+import cartsRepository from "../repositories/carts.repository.js";
+import { CartsService } from "../services/cartsService.js";
+// import { CartsManager } from '../managers/CartsManager.js';
 
 import bcrypt from "bcrypt";
 
-const cartsManager = new CartsManager(); //!Temporary
+// const cartsManager = new CartsManager(); //!Temporary
 
 export async function getUsers(req, res) {
     let { payload } = await usersService.getUsers();
@@ -12,6 +14,8 @@ export async function getUsers(req, res) {
 }
 
 export async function createUser(req, res) {
+    const cartsService = new CartsService(cartsRepository);
+
     const user = req.body;
     
     const { 
@@ -32,7 +36,7 @@ export async function createUser(req, res) {
         role: user.role ?? "user",
     });
 
-    const newCartForUser = await cartsManager.saveCart({
+    const newCartForUser = await cartsService.createCart({
         user_id: savedUser._id,
     });
 

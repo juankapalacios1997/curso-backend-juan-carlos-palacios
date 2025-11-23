@@ -1,40 +1,25 @@
 import { Router } from "express";
-import { CartsManager } from '../managers/CartsManager.js';
+import cartsRepository from "../repositories/carts.repository.js";
+import { CartsService } from "../services/cartsService.js";
+
+// import { CartsManager } from '../managers/CartsManager.js';
 import { authUser } from "../middleware/auth/auth.js";
 import passport from "passport";
+import { saveCart, getCartById, updateCart } from "../controllers/cartsController.js";
 
 export default function cartsRouter(io) {
     const router = Router();
-    const manager = new CartsManager(io);
 
-    router.post('/', async(req, res) => {
-        await manager.saveCart();
-        res.status(201).json({ message: "Carrito creado con exito" });
-    });
+    const cartsService = new CartsService(cartsRepository, io);
 
-    router.get('/:id', async(req, res) => {
-        const { id } = req.params;
+    router.post('/', saveCart(cartsService));
 
-        const cart = await manager.fetchSingleCart(id);
-        res.json(cart); 
-    });
+    router.get('/:id', getCartById(cartsService));
 
     router.put('/:id', passport.authenticate("current", {
             session: false,
             failureRedirect: "/login",
-    }), authUser, async(req, res) => {
-        const { id } = req.params;
-
-        const { pid } = req.body;
-
-        if (!pid) {
-            return res.status(404).json({ message: "Could not find product" });;
-        }
-
-        const response = await manager.updateCart(id, pid);
-
-        res.status(201).json({ message: "Producto anadido al carrito correctamente", response });
-    })
+    }), authUser, updateCart(cartsService))
 
     return router;
 }
