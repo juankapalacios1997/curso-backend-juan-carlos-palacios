@@ -41,7 +41,6 @@ export class CartsService {
 
         const updatedCart = await cartsRepository.updateCart(
             id, 
-            // { products: [...toEditCartProducts] },
             toEditCartProducts,
             { new: true }
         );
@@ -58,5 +57,41 @@ export class CartsService {
 
     async deleteCart(id) {
         return await this.cartsRepository.deleteCart(id);
+    }
+
+    async buyCart(id) {
+        const res = await this.cartsRepository.getCartsBy({ _id: id });
+        
+        if (!res) {
+            throw new Error("Cannot find cart");
+        }
+
+        const toEditCartProducts = new CartProductsDTO(res);
+
+        toEditCartProducts.products.forEach(async (product) => {
+            const dbProduct = await productsModel.findById(product.id);
+
+            const newQuantity = dbProduct.stock - product.quantity;
+
+            if (newQuantity < 0) {
+                throw new Error("Error al momento de realizar la compra. Articulos no disponibles");
+            }
+
+            const updatedProduct = await productsModel.findByIdAndUpdate(
+                dbProduct.id,
+                { stock: dbProduct.stock - product.quantity },
+                { new: true },
+            );
+
+            this.io.emit("productUpdated", updatedProduct, res);
+        });
+
+        await cartsRepository.updateCart(
+            id, 
+            { products: [] },
+            { new: true },
+        );
+
+        this.io.emit("cartWipedOut");
     }
 }

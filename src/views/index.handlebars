@@ -21,7 +21,9 @@
                         <div>
                             {{ this.stock }}
                         </div>
-                        <button class="add-to-cart-btn" data-cid="{{ ../cart.id }}" data-pid="{{ this._id }}">Add to cart</button>
+                        <button class="add-to-cart-btn" data-cid="{{ ../cart.id }}" data-pid="{{ this._id }}">
+                            Anadir al carrito
+                        </button>
                     </li>
                 {{/each}}
             </ul>
@@ -46,6 +48,7 @@
                     </li>
                 {{/each}}
             </ul>
+            <button data-cid="{{ cart.id }}" id="buyAllBtn" style="position: absolute; transform: translateX(350px)">Comprar todo</button>
         </div>
     </div>
 </div>

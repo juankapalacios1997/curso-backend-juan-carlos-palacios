@@ -26,3 +26,15 @@ export const updateCart = (cartsService) => async(req, res) => {
         response 
     });
 };
+
+export const buyCart = (cartsService) => async(req, res) => {
+    const { id } = req.params;
+
+
+    const response = await cartsService.buyCart(id);
+
+    res.status(201).json({ 
+        message: "Carrito comprado correctamente",
+        response 
+    });
+};

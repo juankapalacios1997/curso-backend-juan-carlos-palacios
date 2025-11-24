@@ -6,9 +6,11 @@ const cartProducts = document.getElementById("cartProducts");
 
 const addToCartButtons = document.querySelectorAll(".add-to-cart-btn");
 
-function renderProduct(product) {
+const buyAllBtn = document.querySelector("#buyAllBtn");
+
+function renderProduct(product, cart) {
     const li = document.createElement("li");
-    li.id = `product-${product.id}`;
+    li.id = `product-${product._id}`;
     li.style =
         "max-width: 22vw; margin: 12px; padding: 22px; background-color: rgb(165,0,0); color: white; border-radius: 24px;";
     li.innerHTML = `
@@ -16,7 +18,7 @@ function renderProduct(product) {
         <div>${product.description}</div>
         <div>$${product.price}</div>
         <div>${product.stock}</div>
-        <button class="add-to-cart" data-id="${product.id}">Add to cart</button>
+        <button class="add-to-cart" data-pid="${product._id}" data-cid="${cart._id}">Anadir al carrito</button>
     `;
     return li;
 }
@@ -51,21 +53,49 @@ listaProductos.addEventListener("click", async (e) => {
     }
 });
 
+buyAllBtn.addEventListener("click", async(e) => {
+    const cartId = e.target.dataset.cid;
+
+    await fetch(`http://localhost:8080/carts/${cartId}/buy`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+});
+
 socket.on("connect", () => console.log("connected", socket.id));
 
 
 socket.on("productAdded", (product) => {
-    console.log("New product received:", product);
-
     const li = renderProduct(product);
     listaProductos.appendChild(li)
 });
 
-socket.on("productUpdated", (product) => {
-    console.log("Updated product:", product);
+socket.on("productUpdated", (product, cart) => {
+    console.log("Updated product:", product, cart);
 
-    const old = document.getElementById(`product-${product.id}`);
-    if (old) old.replaceWith(renderProduct(product));
+    const old = document.getElementById(`product-${product._id}`);
+    if (old) old.replaceWith(renderProduct(product, cart));
+
+    const newVal = document.getElementById(`product-${product._id}`);
+
+    console.log(newVal);
+
+    newVal.addEventListener("click", async (e) => {
+        const cartId = e.target.dataset.cid;
+        const productId = e.target.dataset.pid;
+
+        await fetch(`http://localhost:8080/carts/${cartId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                pid: productId,
+            }),
+        })
+    })
 });
 
 socket.on("productDeleted", (id) => {
@@ -90,3 +120,10 @@ socket.on("cartUpdated", (updatedCartItem) => {
 
     cartProducts.appendChild(renderCartProduct(updatedCartItem));
 });
+
+socket.on("cartWipedOut", () => {
+    console.log("Cart wiped out!");
+
+    const liItems = cartProducts.querySelectorAll("li");
+    liItems.forEach(li => li.remove(li));
+})
