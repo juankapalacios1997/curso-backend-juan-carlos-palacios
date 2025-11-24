@@ -1,5 +1,3 @@
-// import cartsService from "../services/cartsService.js";
-
 export const getCartById = (cartsService) => async(req, res) => {
     const { id } = req.params;
 

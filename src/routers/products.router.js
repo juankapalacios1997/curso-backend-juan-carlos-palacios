@@ -3,58 +3,27 @@ import { ProductManager } from '../managers/ProductManager.js';
 import { authAdmin } from "../middleware/auth/auth.js";
 import passport from "passport";
 
+import { ProductsService } from "../services/productsService.js";
+import productsRepository from "../repositories/products.repository.js";
+import { getProducts, getProductById, createProduct, updateProduct, deleteProduct } from "../controllers/productsController.js";
+
 export default function productsRouter(io) {
     const router = Router();
-    const manager = new ProductManager(io);
+    
+    const productsService = new ProductsService(productsRepository, io);
 
-    router.get('/', async(req, res) => {
-        const { limit, page, sortPrice } = req.query;
+    router.get('/', getProducts(productsService));
 
-        const { payload } = await manager.fetchAllProducts({
-            limit: limit ? parseInt(limit) : 10,
-            page: page ? parseInt(page) : 1,
-            sortPrice: sortPrice,
-        });
-        res.json(payload); 
-    });
-
-    router.get('/:id', async(req, res) => {
-        const { id } = req.params;
-
-        const product = await manager.fetchSingleProduct(id);
-        res.json(product); 
-    });
+    router.get('/:id', getProductById(productsService));
 
     router.post('/', passport.authenticate("current", {
         session: false,
         failureRedirect: "/login",
-    }), authAdmin, async(req, res) => {
-        const product = req.body;
+    }), authAdmin, createProduct(productsService));
 
-        const { title, description, price, stock } = product;
+    router.put('/:id', authAdmin, updateProduct(productsService));
 
-        if (!title || !description || !price || !stock ) {
-            return res.send('faltan datos');
-        }
-
-        await manager.saveProduct(product);
-        res.status(201).json({ message: "Product added successfully", product });
-    });
-
-    router.put('/:id', authAdmin, async(req, res) => {
-        const { id } = req.params;
-        const product = req.body;
-
-        await manager.updateProduct(id, product);
-        res.status(201).json({ message: "Product edited successfully", product });
-    });
-
-    router.delete('/:id', async(req, res) => {
-        const { id } = req.params;
-
-        await manager.deleteProduct(id);
-        res.status(204).json({ message: "Product deleted successfully" });
-    });
+    router.delete('/:id', deleteProduct(productsService));
 
     return router;
 }

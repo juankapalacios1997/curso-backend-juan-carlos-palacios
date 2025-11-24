@@ -4,23 +4,23 @@ export class usersDAO {
 
     constructor(){}
 
-    async get() {
-        return await usersModel.find().lean();
+    get() {
+        return usersModel.find().lean();
     }
 
-    async getBy(filter={}) {
-        return await usersModel.findOne(filter).lean();
+    getBy(filter={}) {
+        return usersModel.findOne(filter).lean();
     }
 
-    async create(user) {
-        return await usersModel.create(user);
+    create(user) {
+        return usersModel.create(user);
     }
 
-    async update(id, user) {
-        return await usersModel.findByIdAndUpdate(id, user);
+    update(id, user) {
+        return usersModel.findByIdAndUpdate(id, user);
     }
 
-    async delete(id) {
-        return await usersModel.findByIdAndDelete(id);
+    delete(id) {
+        return usersModel.findByIdAndDelete(id);
     }
 };

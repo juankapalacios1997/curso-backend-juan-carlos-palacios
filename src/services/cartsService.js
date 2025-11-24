@@ -54,7 +54,7 @@ export class CartsService {
     }
 
     async deleteCart(id) {
-        return await this.dao.deleteCart(id);
+        return await this.cartsRepository.deleteCart(id);
     }
 }
 

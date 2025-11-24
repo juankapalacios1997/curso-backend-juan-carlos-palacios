@@ -5,24 +5,24 @@ class CartsRepository {
         this.dao = new dao();
     }
 
-    async getCarts() {
-        return await this.dao.get();
+    getCarts() {
+        return this.dao.get();
     }
 
-    async getCartsBy(filter) {
-        return await this.dao.getBy(filter);
+    getCartsBy(filter) {
+        return this.dao.getBy(filter);
     }
 
-    async createCart(cart) {
-        return await this.dao.create(cart);
+    createCart(cart) {
+        return this.dao.create(cart);
     }
 
-    async updateCart(id, cart, options = {}) {
-        return await this.dao.update(id, cart, options);
+    updateCart(id, cart, options = {}) {
+        return this.dao.update(id, cart, options);
     }
 
-    async deleteCart(id) {
-        return await this.dao.delete(id);
+    deleteCart(id) {
+        return this.dao.delete(id);
     }
 
 }

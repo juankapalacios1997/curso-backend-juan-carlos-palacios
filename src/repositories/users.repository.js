@@ -5,24 +5,24 @@ class UsersRepository {
         this.dao = new dao();
     }
 
-    async getUsers() {
-        return await this.dao.get();
+    getUsers() {
+        return this.dao.get();
     }
 
-    async getUsersBy(filter) {
-        return await this.dao.getBy(filter);
+    getUsersBy(filter) {
+        return this.dao.getBy(filter);
     }
 
-    async createUser(user) {
-        return await this.dao.create(user);
+    createUser(user) {
+        return this.dao.create(user);
     }
 
-    async updateUser(id, user) {
-        return await this.dao.update(id, user);
+    updateUser(id, user) {
+        return this.dao.update(id, user);
     }
 
-    async deleteUser(id) {
-        return await this.dao.delete(id);
+    deleteUser(id) {
+        return this.dao.delete(id);
     }
 
 }

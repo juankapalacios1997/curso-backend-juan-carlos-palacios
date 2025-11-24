@@ -4,20 +4,20 @@ export class cartsDAO {
 
     constructor(){}
 
-    async get() {
-        return await cartsModel.find().lean();
+    get() {
+        return cartsModel.find().lean();
     }
 
-    async getBy(filter={}) {
-        return await cartsModel.findOne(filter).lean();
+    getBy(filter={}) {
+        return cartsModel.findOne(filter).lean();
     }
 
-    async create(cart) {
-        return await cartsModel.create(cart);
+    create(cart) {
+        return cartsModel.create(cart);
     }
 
-    async update(id, cart, options = {}) {
-        return await cartsModel.findByIdAndUpdate(id, cart, options);
+    update(id, cart, options = {}) {
+        return cartsModel.findByIdAndUpdate(id, cart, options);
     }
 
 };
