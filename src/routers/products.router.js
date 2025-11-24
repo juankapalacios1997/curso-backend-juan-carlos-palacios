@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { ProductManager } from '../managers/ProductManager.js';
 import { authAdmin } from "../middleware/auth/auth.js";
 import passport from "passport";
 
@@ -21,7 +20,10 @@ export default function productsRouter(io) {
         failureRedirect: "/login",
     }), authAdmin, createProduct(productsService));
 
-    router.put('/:id', authAdmin, updateProduct(productsService));
+    router.put('/:id', passport.authenticate("current", {
+        session: false,
+        failureRedirect: "/login",
+    }), authAdmin, updateProduct(productsService));
 
     router.delete('/:id', deleteProduct(productsService));
 
