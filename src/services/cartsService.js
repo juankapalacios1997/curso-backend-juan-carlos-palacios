@@ -2,6 +2,7 @@ import cartsRepository from "../repositories/carts.repository.js";
 import { productsModel } from "../models/products.model.js";
 
 import { CartProductsDTO } from "../dto/cartProductsDTO.js";
+import { ProductStockDTO } from "../dto/productStockDTO.js";
 
 export class CartsService {
     constructor(dao, io) {
@@ -77,9 +78,13 @@ export class CartsService {
                 throw new Error("Error al momento de realizar la compra. Articulos no disponibles");
             }
 
+            dbProduct.stock = newQuantity;
+
+            const stockPayload = new ProductStockDTO(dbProduct);
+
             const updatedProduct = await productsModel.findByIdAndUpdate(
                 dbProduct.id,
-                { stock: dbProduct.stock - product.quantity },
+                stockPayload,
                 { new: true },
             );
 
