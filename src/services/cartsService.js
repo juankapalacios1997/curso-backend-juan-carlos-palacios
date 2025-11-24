@@ -1,6 +1,8 @@
 import cartsRepository from "../repositories/carts.repository.js";
 import { productsModel } from "../models/products.model.js";
 
+import { CartProductsDTO } from "../dto/cartProductsDTO.js";
+
 export class CartsService {
     constructor(dao, io) {
         this.cartsRepository = dao;
@@ -27,19 +29,20 @@ export class CartsService {
             throw new Error("Cannot find cart");
         }
 
-        const toEditCartProducts = [...res.products];
+        const toEditCartProducts = new CartProductsDTO(res);
 
-        const productIndex = toEditCartProducts.findIndex(item => item.id.toString() === pid);
+        const productIndex = toEditCartProducts.products.findIndex(item => item.id.toString() === pid);
 
         if (productIndex < 0) {
-            toEditCartProducts.push({ id: pid, quantity: 1 });
+            toEditCartProducts.products.push({ id: pid, quantity: 1 });
         } else {
-            toEditCartProducts[productIndex].quantity++;
+            toEditCartProducts.products[productIndex].quantity++;
         }
 
         const updatedCart = await cartsRepository.updateCart(
             id, 
-            { products: [...toEditCartProducts] },
+            // { products: [...toEditCartProducts] },
+            toEditCartProducts,
             { new: true }
         );
 
@@ -57,6 +60,3 @@ export class CartsService {
         return await this.cartsRepository.deleteCart(id);
     }
 }
-
-// const cartsService = new CartsService(cartsRepository);
-// export default cartsService;

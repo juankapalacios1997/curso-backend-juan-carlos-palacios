@@ -6,7 +6,6 @@ class ProductsRepository {
     }
 
     getProducts() {
-        console.log(this.dao.get(), "repo")
         return this.dao.get();
     }
 

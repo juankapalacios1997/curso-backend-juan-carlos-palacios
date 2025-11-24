@@ -8,10 +8,6 @@ export class ProductsService {
 
     async getProducts({ limit = 10, page = 1, sortPrice } = {}) {
         let query = productsRepository.getProducts();
-
-        console.log(query, "service")
-
-        console.log(query);
         
         if (sortPrice === "asc") {
             query = query.sort({ price: 1 });
