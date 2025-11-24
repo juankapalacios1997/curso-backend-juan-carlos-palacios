@@ -73,14 +73,12 @@ socket.on("productAdded", (product) => {
 });
 
 socket.on("productUpdated", (product, cart) => {
-    console.log("Updated product:", product, cart);
+    console.log("Updated product:", product);
 
     const old = document.getElementById(`product-${product._id}`);
     if (old) old.replaceWith(renderProduct(product, cart));
 
     const newVal = document.getElementById(`product-${product._id}`);
-
-    console.log(newVal);
 
     newVal.addEventListener("click", async (e) => {
         const cartId = e.target.dataset.cid;
